@@ -5,14 +5,16 @@ import { useNavigation } from '@react-navigation/native';
 
 import { styles } from './styles';
 
+import { Background } from '../../components/Layout/Background';
+
 export function Home(){
   const navigation = useNavigation();
 
   return (
-    <View style={styles.container}>
+    <Background>
       <StatusBar style="auto" />
       <Text style={styles.text} >Home</Text>
       <Button title='Detalhes' onPress={() => navigation.navigate('details')} />
-    </View>
+    </Background>
   );
 }

@@ -14,25 +14,20 @@ const { Navigator, Screen } = createBottomTabNavigator();
 export function TabRoutes(){
   return(
     <Navigator screenOptions={({ route }) => ({
-      tabBarIcon: ({ focused, color }) => {
+      tabBarIcon: ({ color }) => {
         let iconName: keyof typeof Ionicons.glyphMap;
-
-        if (route.name === 'home') {
-          iconName = 'logo-github';
-        } else {
-          iconName = 'star';
-        }
+        route.name === 'home' ? iconName = 'logo-github' : iconName = 'star';
 
         return <Ionicons name={iconName} size={24} color={color} />;
       },
-      tabBarActiveTintColor: THEME.COLORS.PRIMARY,
-      tabBarInactiveTintColor: THEME.COLORS.SECONDARY,
-      headerShown: false,
       tabBarLabel: ({ focused }) => {
         let tabName = route.name === 'home' ? 'Repositórios' : 'Favoritos';
 
         return <Text style={focused ? styles.focusedLabel : styles.label}>{tabName}</Text>
       },
+      tabBarActiveTintColor: THEME.COLORS.PRIMARY,
+      tabBarInactiveTintColor: THEME.COLORS.SECONDARY,
+      headerShown: false,
       tabBarStyle: { marginBottom: 6 }
     })} >
       <Screen name='home' component={Home} />

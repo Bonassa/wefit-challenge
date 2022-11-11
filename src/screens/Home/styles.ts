@@ -3,14 +3,17 @@ import { StyleSheet } from 'react-native';
 import { THEME } from '../../theme';
 
 export const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
+  contentList: {
+    paddingHorizontal: 16,
+    paddingVertical: 16
   },
 
-  text: {
-    fontFamily: THEME.FONT_FAMILY.ROBOTO_REGULAR,
-    fontSize: THEME.FONT_SIZE.LG
+  firstLabel: {
+    color: THEME.COLORS.CAPTION_900
+  },
+  
+  secondLabel: {
+    fontFamily: THEME.FONT_FAMILY.INTER_BOLD,
+    color: THEME.COLORS.CAPTION_900
   }
 });

@@ -25,3 +25,7 @@ Para utilizar a navegação de Stack e Tab
 
   yarn add @react-navigation/bottom-tabs
 ```
+
+expo install react-native-iphone-x-helper
+
+expo install axios

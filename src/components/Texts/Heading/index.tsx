@@ -1,21 +1,21 @@
 
-import { ColorValue, Text, TextProps } from "react-native";
-import { THEME } from "../../../theme";
+import { StyleProp, Text, TextProps, TextStyle } from "react-native";
+
+import { styles } from "./styles";
 
 interface HeadingProps extends TextProps {
-  size?: 20 | 16;
-  fontFamily?: 'Roboto_400Regular' | 'Roboto_500Medium' | 'Inter_400Regular' | 'Inter_700Bold';
-  color: ColorValue;
-  children: React.ReactNode;
+  children?: never;
+  text: string;
+  style?: StyleProp<TextStyle>;
 }
 
-export function Heading({ children, size = 20, fontFamily = "Roboto_500Medium", color = THEME.COLORS.CAPTION_900, ...rest} : HeadingProps){
+export function Heading({ text, style, ...rest} : HeadingProps){
   return (
     <Text
-      style={{ fontSize: size, fontFamily: fontFamily, color: color }}
+      style={[styles.heading, style]}
       { ...rest }
     >
-      { children }
+      { text }
     </Text>
   )
 }

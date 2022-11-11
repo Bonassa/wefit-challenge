@@ -1,21 +1,21 @@
 
-import { ColorValue, Text, TextProps } from "react-native";
-import { THEME } from "../../../theme";
+import { StyleProp, Text, TextProps, TextStyle } from "react-native";
+
+import { styles } from "./styles";
 
 interface TextingProps extends TextProps {
-  size?: 12 | 14 | 16;
-  fontFamily?: 'Roboto_400Regular' | 'Roboto_500Medium' | 'Inter_400Regular' | 'Inter_700Bold';
-  color?: ColorValue;
-  children: React.ReactNode;
+  children?: never;
+  text: string;
+  style?: StyleProp<TextStyle>;
 }
 
-export function Texting({ children, size = 12, fontFamily = "Inter_400Regular", color = THEME.COLORS.CAPTION_700, ...rest} : TextingProps){
+export function Texting({ text, style, ...rest} : TextingProps){
   return (
     <Text
-      style={{ fontSize: size, fontFamily: fontFamily, color: color }}
+      style={[ styles.texting, style ]}
       { ...rest }
     >
-      { children }
+      { text }
     </Text>
   )
 }

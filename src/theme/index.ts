@@ -13,6 +13,7 @@ export const THEME = {
     YELLOW_500: '#FFD02C',
     YELLOW_100: '#FAF3DC',
 
+    RED: '#F22828',
 
     BACKGROUND: '#F6F6F5',
     OVERLAY: 'rgba(0,0,0,0.5)',    

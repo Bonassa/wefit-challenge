@@ -13,9 +13,7 @@ export const styles = StyleSheet.create({
   },
 
   circle: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+    borderRadius: 20,
     backgroundColor: THEME.COLORS.RED
   },
 

@@ -1,5 +1,5 @@
 
-import { View, TouchableOpacity, TouchableOpacityProps } from 'react-native';
+import { View, TouchableOpacity, TouchableOpacityProps, StyleProp, TextStyle } from 'react-native';
 
 import { styles } from './styles';
 
@@ -20,6 +20,7 @@ interface HeaderRightIconProps extends TouchableOpacityProps {
 
 interface HeaderLabelProps {
   text: string;
+  style?: StyleProp<TextStyle>;
 }
 
 function HeaderRoot({ children, theme = 'light' } : HeaderRootProps){
@@ -52,11 +53,12 @@ function HeaderRightIcon({ children, ...rest } : HeaderRightIconProps){
   )
 }
 
-function HeaderLabel({ text } : HeaderLabelProps){
+function HeaderLabel({ text, style } : HeaderLabelProps){
   return (
     <View style={styles.label}>
       <Heading
         text={ text }
+        style={ style }
       />
     </View>
   )

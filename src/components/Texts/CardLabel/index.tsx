@@ -1,5 +1,5 @@
 
-import { View } from "react-native";
+import { StyleProp, TextStyle, View } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { styles } from "./styles";
@@ -13,11 +13,13 @@ interface CardLabelRootProps {
 interface CardLabelIconProps {
   haveIcon: boolean;
   iconName?: keyof typeof Ionicons.glyphMap;
+  circleSize?: number;
   children?: never;
 }
 
 interface CardLabelTextProps {
   text: string;
+  style?: StyleProp<TextStyle>;
   children?: never;
 }
 
@@ -29,7 +31,7 @@ function CardLabelRoot({ children } : CardLabelRootProps) {
   )
 }
 
-function CardLabelIcon({ iconName, haveIcon } : CardLabelIconProps) {
+function CardLabelIcon({ iconName, haveIcon, circleSize = 8 } : CardLabelIconProps) {
   if(haveIcon === true && iconName !== undefined) {
     return (
       <Ionicons 
@@ -40,15 +42,15 @@ function CardLabelIcon({ iconName, haveIcon } : CardLabelIconProps) {
     )
   } else {
     return (
-      <View style={styles.circle} />
+      <View style={[styles.circle, { width: circleSize, height: circleSize }]} />
     )
   }
 }
 
-function CardLabelText({ text } : CardLabelTextProps) {
+function CardLabelText({ text, style } : CardLabelTextProps) {
   return (
     <Texting
-      style={styles.text}
+      style={[styles.text, style]}
       text={text}
     />
   )

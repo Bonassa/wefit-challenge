@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { Alert, FlatList } from 'react-native';
+import { FlatList } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 
@@ -23,8 +23,31 @@ export function Home(){
 
   useEffect(() => {
     async function loadRepos(){
-      await apiAxios.get('Bonassa/repos')
-      .then((json) => setRepos(json.data))
+      await apiAxios.get('facebook/repos')
+      .then((json) => {
+        let data : ApiResponse[] = json.data;
+        let futureData : ApiResponse[] = [];
+
+        data.map((item) => {
+          let mapedData : ApiResponse = {
+            description: item.description,
+            full_name: item.full_name,
+            html_url: item.html_url,
+            id: item.id,
+            language: item?.language,
+            name: item.name,
+            owner: {
+              avatar_url: item.owner.avatar_url,
+              login: item.owner.login
+            },
+            stargazers_count: item.stargazers_count
+          }
+
+          futureData.push(mapedData);
+        })
+
+        setRepos(futureData)
+      })
     }
 
     loadRepos();
@@ -50,7 +73,7 @@ export function Home(){
           contentContainerStyle={styles.contentList}
           renderItem={({item}) => {
             return (
-              <Card.Root key={item.id} onPress={() => Alert.alert('Botão')}>
+              <Card.Root key={item.id} onPress={() => navigation.navigate('details', item)}>
                 <Card.Header>
                   <Card.Label>
                     <Texting text={item.owner.login + '/'} style={styles.firstLabel} />
@@ -62,7 +85,7 @@ export function Home(){
                 <Card.Description text={item.description} />
 
                 <Card.Footer>
-                  <CardButton.Root onPress={() => Alert.alert('Favoritou')}>
+                  <CardButton.Root onPress={() => {}}>
                     <CardButton.Icon iconName='star' />
 
                     <CardButton.Label text='Favoritar' />

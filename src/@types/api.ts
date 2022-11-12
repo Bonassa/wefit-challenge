@@ -2,6 +2,7 @@
 export type ApiResponse = {
   id: string;
   name: string;
+  full_name: string;
   description: string;
   owner: {
     login: string;

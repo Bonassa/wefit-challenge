@@ -9,6 +9,7 @@ export const THEME = {
     CAPTION_900: '#070707',
     CAPTION_700: '#9A9A9A',
     CAPTION_500: '#DADADA',
+    CAPTION_400: '#E0E0E0',
 
     YELLOW_500: '#FFD02C',
     YELLOW_100: '#FAF3DC',

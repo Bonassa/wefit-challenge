@@ -20,12 +20,16 @@ import { Card } from '../../components/Layout/Card';
 import { CardButton } from '../../components/Buttons/CardButton';
 import { CardLabel } from '../../components/Texts/CardLabel';
 import { DetailProps } from '../../@types/navigation';
+import { TextInputBottomSheet } from '../../components/Inputs/TextInputBottomSheet';
+import { BottomSheetButton } from '../../components/Buttons/BottomSheetButton';
 
 function Home(){
   const navigation = useNavigation();
   const [repos, setRepos] = useState<ApiResponse[]>([]);
   const [savedOnStorageRepos, setSavedOnStorageRepos] = useState<ApiResponse[]>([]);
   const { setItem, getItem } = useAsyncStorage('@wefit_repos');
+  const [repoName, setRepoName] = useState('Bonassa');
+  const [inputValue, setInputValue] = useState('');
 
   // Bottom Sheet Variables
   const sheetRef = useRef<BottomSheetModal>(null);
@@ -42,11 +46,10 @@ function Home(){
     setIsOpen(false);
   }, [])
 
-
   useFocusEffect(
     useCallback(() => {
       async function loadRepos(){
-        await apiAxios.get('facebook/repos')
+        await apiAxios.get(`${repoName}/repos`)
         .then( async (json) => {
           let data : ApiResponse[] = json.data;
           let futureData : ApiResponse[] = [];
@@ -87,7 +90,7 @@ function Home(){
       }
 
       loadRepos();
-    }, [])
+    }, [repoName])
   )
 
   async function handleSaveRepoOnAsyncStorage( repo : ApiResponse ){
@@ -110,6 +113,14 @@ function Home(){
     } catch(error) {
       Alert.alert('Erro', 'Não foi possível favoritar este repositório!');
     }
+  }
+
+  function handleSearchRepos(){
+    if(inputValue !== ''){
+      setRepoName(inputValue)
+    }
+
+    handleCloseBottomSheet()
   }
 
   return (
@@ -178,26 +189,37 @@ function Home(){
 
           <BottomSheetModal
             ref={sheetRef}
-            // index={0}
             snapPoints={snapPoints}
             onDismiss={() => setIsOpen(false)}
             enablePanDownToClose={true}
+            handleIndicatorStyle={styles.indicator}
+            keyboardBehavior="interactive"
           >
             <View style={styles.contentContainer}>
-              <Text>Awesome 🎉</Text>
+              <Texting text='Alterar usuário selecionado' style={styles.bottomHeader} />
+
+              <TextInputBottomSheet 
+                autoCapitalize='none'
+                autoCorrect={false}
+                value={inputValue}
+                onChangeText={setInputValue}
+              />
+
+              <View style={styles.bottomButtons}>
+                <BottomSheetButton 
+                  label='Cancelar' 
+                  primary={false} 
+                  onPress={handleCloseBottomSheet} 
+                />
+
+                <BottomSheetButton 
+                  label='Salvar' 
+                  primary
+                  onPress={handleSearchRepos}
+                />
+              </View>
             </View>
           </BottomSheetModal>
-
-          {/* <BottomSheet
-            ref={sheetRef}
-            snapPoints={snapPoints}
-            enablePanDownToClose={true}
-            onClose={() => setIsOpen(false)}
-          >
-            <BottomSheetView>
-
-            </BottomSheetView>
-          </BottomSheet> */}
         </>
       </Background>
     </>

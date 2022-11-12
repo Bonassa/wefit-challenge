@@ -20,7 +20,8 @@ export const styles = StyleSheet.create({
 
   contentContainer: {
     flex: 1,
-    alignItems: 'center',
+    flexDirection: 'column',
+    paddingHorizontal: 16
   },
 
   overlay: {
@@ -31,5 +32,22 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: '200%',
     backgroundColor: THEME.COLORS.OVERLAY
+  },
+
+  indicator: {
+    marginVertical: 8,
+    backgroundColor: THEME.COLORS.CAPTION_400
+  },
+
+  bottomHeader: {
+    fontFamily: THEME.FONT_FAMILY.ROBOTO_REGULAR,
+    fontSize: THEME.FONT_SIZE.MD,
+    color: THEME.COLORS.BLACK,
+    marginBottom: 12
+  },
+
+  bottomButtons: {
+    flexDirection: 'row',
+    marginTop: 12
   }
 });

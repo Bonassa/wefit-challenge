@@ -31,3 +31,10 @@ expo install react-native-iphone-x-helper
 expo install axios
 
 expo install @react-native-async-storage/async-storage
+
+### Bottom Sheet
+```bash
+  yarn add @gorhom/bottom-sheet@^4
+
+  expo install react-native-reanimated react-native-gesture-handler
+```

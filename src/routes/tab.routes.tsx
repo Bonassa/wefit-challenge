@@ -5,7 +5,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { styles } from './styles';
 
-import { Home } from '../screens/Home';
+import Home from '../screens/Home';
 import { Favorites } from '../screens/Favorites';
 import { THEME } from '../theme';
 

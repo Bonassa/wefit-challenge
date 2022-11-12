@@ -1,9 +1,11 @@
 
-import { useState, useCallback } from 'react';
-import { Alert, FlatList } from 'react-native';
+import { useState, useCallback, useRef } from 'react';
+import { Alert, FlatList, View, Text, TouchableWithoutFeedback } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useAsyncStorage } from '@react-native-async-storage/async-storage';
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
+import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 
 import { styles } from './styles';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -19,11 +21,27 @@ import { CardButton } from '../../components/Buttons/CardButton';
 import { CardLabel } from '../../components/Texts/CardLabel';
 import { DetailProps } from '../../@types/navigation';
 
-export function Home(){
+function Home(){
   const navigation = useNavigation();
   const [repos, setRepos] = useState<ApiResponse[]>([]);
   const [savedOnStorageRepos, setSavedOnStorageRepos] = useState<ApiResponse[]>([]);
   const { setItem, getItem } = useAsyncStorage('@wefit_repos');
+
+  // Bottom Sheet Variables
+  const sheetRef = useRef<BottomSheetModal>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const snapPoints = ["30%"];
+
+  const handleOpenBottomSheet = useCallback((index : number) => {
+    sheetRef.current?.present(index);
+    setIsOpen(true);
+  }, [])
+
+  const handleCloseBottomSheet = useCallback(() => {
+    sheetRef.current?.dismiss();
+    setIsOpen(false);
+  }, [])
+
 
   useFocusEffect(
     useCallback(() => {
@@ -101,59 +119,89 @@ export function Home(){
       <Header.Root theme='light'>
         <Header.Label text='WeFit' />
 
-        <Header.RightIcon>
+        <Header.RightIcon onPress={() => handleOpenBottomSheet(isOpen ? -1 : 0)}>
           <Ionicons name="settings-sharp" size={24} />
         </Header.RightIcon>
       </Header.Root>
 
       <Background>
-        <FlatList
-          data={repos}
-          keyExtractor={item => item.id}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.contentList}
-          renderItem={({item}) => {
-            const itemInfosForDetail : DetailProps = {
-              ...item,
-              savedOnStorage: false
-            }
+        <>
+          { isOpen && (
+            <View style={styles.overlay} />
+          ) }
+          <FlatList
+            data={repos}
+            keyExtractor={item => item.id}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.contentList}
+            renderItem={({item}) => {
+              const itemInfosForDetail : DetailProps = {
+                ...item,
+                savedOnStorage: false
+              }
 
-            return (
-              <Card.Root key={item.id} onPress={() => navigation.navigate('details', itemInfosForDetail)}>
-                <Card.Header>
-                  <Card.Label>
-                    <Texting text={item.owner.login + '/'} style={styles.firstLabel} />
-                    <Texting text={item.name} style={styles.secondLabel} />
-                  </Card.Label>
-                  <Card.Image source={{uri: item.owner.avatar_url}} />
-                </Card.Header>
+              return (
+                <Card.Root key={item.id} onPress={() => navigation.navigate('details', itemInfosForDetail)}>
+                  <Card.Header>
+                    <Card.Label>
+                      <Texting text={item.owner.login + '/'} style={styles.firstLabel} />
+                      <Texting text={item.name} style={styles.secondLabel} />
+                    </Card.Label>
+                    <Card.Image source={{uri: item.owner.avatar_url}} />
+                  </Card.Header>
 
-                <Card.Description text={item.description} />
+                  <Card.Description text={item.description} />
 
-                <Card.Footer>
-                  <CardButton.Root onPress={() => handleSaveRepoOnAsyncStorage(item)}>
-                    <CardButton.Icon iconName='star' />
+                  <Card.Footer>
+                    <CardButton.Root onPress={() => handleSaveRepoOnAsyncStorage(item)}>
+                      <CardButton.Icon iconName='star' />
 
-                    <CardButton.Label text='Favoritar' />
-                  </CardButton.Root>
+                      <CardButton.Label text='Favoritar' />
+                    </CardButton.Root>
 
-                  <CardLabel.Root>
-                    <CardLabel.Icon haveIcon iconName='star' />
-                    <CardLabel.Text text={item.stargazers_count.toString()} />
-                  </CardLabel.Root>
-
-                  { item.language && (
                     <CardLabel.Root>
-                      <CardLabel.Icon haveIcon={false} />
-                      <CardLabel.Text text={item.language} />
+                      <CardLabel.Icon haveIcon iconName='star' />
+                      <CardLabel.Text text={item.stargazers_count.toString()} />
                     </CardLabel.Root>
-                  ) }
-                </Card.Footer>
-              </Card.Root>
-            )
-          }}
-        />
+
+                    { item.language && (
+                      <CardLabel.Root>
+                        <CardLabel.Icon haveIcon={false} />
+                        <CardLabel.Text text={item.language} />
+                      </CardLabel.Root>
+                    ) }
+                  </Card.Footer>
+                </Card.Root>
+              )
+            }}
+          />
+
+          <BottomSheetModal
+            ref={sheetRef}
+            // index={0}
+            snapPoints={snapPoints}
+            onDismiss={() => setIsOpen(false)}
+            enablePanDownToClose={true}
+          >
+            <View style={styles.contentContainer}>
+              <Text>Awesome 🎉</Text>
+            </View>
+          </BottomSheetModal>
+
+          {/* <BottomSheet
+            ref={sheetRef}
+            snapPoints={snapPoints}
+            enablePanDownToClose={true}
+            onClose={() => setIsOpen(false)}
+          >
+            <BottomSheetView>
+
+            </BottomSheetView>
+          </BottomSheet> */}
+        </>
       </Background>
     </>
   );
 }
+
+export default gestureHandlerRootHOC(Home);

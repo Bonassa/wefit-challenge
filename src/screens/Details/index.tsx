@@ -23,7 +23,7 @@ export function Details(){
   const navigation = useNavigation();
   const route = useRoute();
   const repo = route.params as DetailProps;
-  const { setItem, removeItem, getItem } = useAsyncStorage('@wefit_repos');
+  const { setItem, getItem } = useAsyncStorage('@wefit_repos');
   const [savedOnStorage, setSavedOnStorage] = useState(repo.savedOnStorage);
 
   async function handleViewRepositorie(){

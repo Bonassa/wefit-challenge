@@ -3,11 +3,13 @@ import { useState } from 'react';
 import { View, Linking, Alert } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
+import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 
 import { styles } from "./styles";
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-import { ApiResponse } from "../../@types/api";
+import { DetailProps } from '../../@types/navigation';
+import { ApiResponse } from '../../@types/api';
 
 import { Background } from "../../components/Layout/Background";
 import { Header } from "../../components/Layout/Header";
@@ -20,8 +22,9 @@ import { MainButton } from '../../components/Buttons/MainButton';
 export function Details(){
   const navigation = useNavigation();
   const route = useRoute();
-  const repo = route.params as ApiResponse;
-  const [savedOnStorage, setSavedOnStorage] = useState(false);
+  const repo = route.params as DetailProps;
+  const { setItem, removeItem, getItem } = useAsyncStorage('@wefit_repos');
+  const [savedOnStorage, setSavedOnStorage] = useState(repo.savedOnStorage);
 
   async function handleViewRepositorie(){
     const supported = await Linking.canOpenURL(repo.html_url);
@@ -30,6 +33,35 @@ export function Details(){
       await Linking.openURL(repo.html_url);
     } else {
       Alert.alert('Link Inválido', 'Não foi possível abrir o caminho deste repositório');
+    }
+  }
+
+  async function handleFavoriteToggle(){
+    const storageValues = await getItem();
+
+    if(savedOnStorage){
+      if(storageValues){
+        const savedRepos : ApiResponse[] = JSON.parse(storageValues);
+  
+        const filtredRepos = savedRepos.filter(repos => repos.full_name !== repo.full_name);
+  
+        await setItem(JSON.stringify(filtredRepos))
+        .then(() => setSavedOnStorage(false));
+      }
+    } else {
+      if(storageValues){
+        const savedRepos : ApiResponse[] = JSON.parse(storageValues);
+        let jsonValue;
+
+        if(savedRepos.length !== 0){
+          jsonValue = JSON.stringify([...savedRepos, repo])
+        } else {
+          jsonValue = JSON.stringify([repo]);
+        }
+
+        await setItem(jsonValue)
+        .then(() => setSavedOnStorage(true));
+      }
     }
   }
 
@@ -65,8 +97,16 @@ export function Details(){
         </View>
 
         <View style={styles.footer}>
-          <LinkButton label="Ver repositório" onPress={handleViewRepositorie} />
-          <MainButton label={savedOnStorage ? 'Desfavoritar' : 'Favoritar'} primary={!savedOnStorage} />
+          <LinkButton 
+            label="Ver repositório" 
+            onPress={handleViewRepositorie} 
+          />
+
+          <MainButton 
+            label={savedOnStorage ? 'Desfavoritar' : 'Favoritar'} 
+            primary={!savedOnStorage}
+            onPress={handleFavoriteToggle}
+          />
         </View>
       </View>
     </Background>

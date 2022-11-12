@@ -29,3 +29,5 @@ Para utilizar a navegação de Stack e Tab
 expo install react-native-iphone-x-helper
 
 expo install axios
+
+expo install @react-native-async-storage/async-storage

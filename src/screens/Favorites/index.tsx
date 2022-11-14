@@ -20,7 +20,7 @@ import { DetailProps } from "../../@types/navigation";
 export function Favorites(){
   const navigation = useNavigation();
   const [ savedRepos, setSavedRepos ] = useState<ApiResponse[]>([]);
-  const { getItem, removeItem } = useAsyncStorage('@wefit_repos');
+  const { getItem } = useAsyncStorage('@wefit_repos');
 
   useFocusEffect(
     useCallback(() => {

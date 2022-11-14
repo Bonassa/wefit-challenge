@@ -50,7 +50,6 @@ export const styles = StyleSheet.create({
     fontSize: THEME.FONT_SIZE.SM
   },
 
-
   footer: {
     paddingBottom: getBottomSpace() + 16,
     paddingHorizontal: 16,

@@ -17,7 +17,7 @@ export const THEME = {
     RED: '#F22828',
 
     BACKGROUND: '#F6F6F5',
-    OVERLAY: 'rgba(0,0,0,0.5)',    
+    OVERLAY: 'rgba(0,0,0,0.6)',    
   },
 
   FONT_FAMILY: {

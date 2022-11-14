@@ -10,7 +10,17 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     marginBottom: 16,
     borderRadius: 4,
-    backgroundColor: THEME.COLORS.WHITE
+    backgroundColor: THEME.COLORS.WHITE,
+
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
   },
 
   header: {
